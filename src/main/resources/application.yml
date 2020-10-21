@@ -1,0 +1,7 @@
+info:
+  app:
+    name: "Liquibase Demo"
+    version: "1.0.0"
+
+spring.profiles.include: database
+spring.application.name: Liquibase-Demo
