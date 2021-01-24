@@ -1,8 +1,7 @@
 package com.tolkiana.liquibasedemo.data
 
-data class ProductSize(
+data class Size(
     val id: Int,
-    val name: String,
-    val sizeCode: String,
+    val code: String,
     val sortOrder: Int
 )
