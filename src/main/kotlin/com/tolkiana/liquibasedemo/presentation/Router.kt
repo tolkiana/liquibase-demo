@@ -12,7 +12,8 @@ class Router(private val handler: Handler) {
     fun routes(): RouterFunction<ServerResponse> {
         return router {
             GET("/products", handler::getProducts)
-            GET("/products/{product_id}/sizes", handler::getSizes)
+            GET("/sizes", handler::getSizes)
+            GET("/colors", handler::getColors)
         }
     }
 }
