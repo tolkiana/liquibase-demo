@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changelog.sql
+      context: dev, prod
+  - include:
+      file: db/changelog/dataset.dev.sql
+      context: dev
+  - include:
+      file: db/changelog/dataset.prod.sql
+      context: prod

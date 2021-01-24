@@ -10,6 +10,8 @@ import reactor.core.publisher.Mono
 
 @Component
 class Handler(private val productRepository: ProductRepository) {
-    fun getProducts(request: ServerRequest): Mono<ServerResponse> = ServerResponse.ok().json().body(productRepository.findAll(), Product::class.java)
-    fun getSizes(request: ServerRequest): Mono<ServerResponse> = ServerResponse.ok().json().bodyValue("Sizes")
+    fun getProducts(request: ServerRequest): Mono<ServerResponse> =
+            ServerResponse.ok().json().body(productRepository.findAll(), Product::class.java)
+    fun getSizes(request: ServerRequest): Mono<ServerResponse> =
+            ServerResponse.ok().json().bodyValue("Sizes")
 }
