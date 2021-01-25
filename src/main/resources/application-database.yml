@@ -4,5 +4,14 @@ spring:
     url: r2dbc:postgresql://localhost/postgres
     username: postgres
     password: liquibase
+  datasource:
+    url: jdbc:postgresql://localhost/postgres
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: liquibase
+  liquibase:
+    changeLog: "classpath:db/changelog/main-changelog.yml"
+    contexts: prod
+    dropFirst: false
 
 logging.level.org.springframework.data.r2dbc: DEBUG
