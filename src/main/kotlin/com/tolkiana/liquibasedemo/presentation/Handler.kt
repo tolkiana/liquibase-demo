@@ -14,9 +14,9 @@ import reactor.core.publisher.Mono
 
 @Component
 class Handler(
-        private val sizeRepository: SizeRepository,
-        private val colorRepository: ColorRepository,
-        private val productRepository: ProductRepository
+    private val sizeRepository: SizeRepository,
+    private val colorRepository: ColorRepository,
+    private val productRepository: ProductRepository
 ) {
     fun getProducts(request: ServerRequest): Mono<ServerResponse> =
             ServerResponse.ok().json().body(productRepository.findAll(), Product::class.java)
