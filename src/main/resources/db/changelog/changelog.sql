@@ -28,3 +28,14 @@ CREATE TABLE product_colors (
     FOREIGN KEY (product_id) REFERENCES products (id),
     FOREIGN KEY (color_id) REFERENCES colors (id)
 );
+
+--changeset tolkiana:3
+ALTER TABLE products DROP COLUMN size_id;
+ALTER TABLE products RENAME COLUMN name TO code;
+
+CREATE TABLE product_sizes (
+    product_id INTEGER NOT NULL,
+    size_id INTEGER NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products (id),
+    FOREIGN KEY (size_id) REFERENCES sizes (id)
+);
