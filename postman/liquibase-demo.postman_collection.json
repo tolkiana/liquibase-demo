@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "fddaec96-7b82-472c-b154-0de52cdc88ac",
+		"name": "liquibase-demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/products/{product_id}/sizes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/products/{{product_id}}/sizes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}",
+						"sizes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{product_id}/colors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/products/{{product_id}}/colors",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}",
+						"colors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sizes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/sizes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"sizes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/colors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/colors",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"colors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/products",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
