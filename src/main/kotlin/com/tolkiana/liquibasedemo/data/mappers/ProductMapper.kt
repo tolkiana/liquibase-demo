@@ -11,9 +11,7 @@ class ProductMapper: BiFunction<Row, Any, Product> {
         return Product(
             row.get("product_id", Number::class.java)!!,
             row.get("product_code", String::class.java)!!,
-            row.get("product_description", String::class.java)!!,
-            emptyList(),
-            emptyList()
+            row.get("product_description", String::class.java)!!
         )
     }
 }
