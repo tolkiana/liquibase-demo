@@ -6,9 +6,9 @@ import org.springframework.data.relational.core.mapping.Table
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Table("products")
 data class Product(
-    val id: Number,
+    val id: Number ? = null,
     val code: String,
     val description: String,
-    val sizes: List<Size>,
-    val colors: List<Color>
+    val sizes: List<Size> ? = null,
+    val colors: List<Color> ? = null
 )

@@ -16,6 +16,7 @@ class Router(private val handler: Handler) {
             GET("/products/{product_id}/colors", handler::getProductColors)
             GET("/sizes", handler::getAllSizes)
             GET("/colors", handler::getAllColors)
+            POST("/products", handler::saveProduct)
         }
     }
 }

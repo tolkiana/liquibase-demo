@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.ServerResponse.*
 import org.springframework.web.reactive.function.server.body
+import org.springframework.web.reactive.function.server.bodyToMono
 import org.springframework.web.reactive.function.server.json
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
@@ -40,6 +41,13 @@ class Handler(
     fun getProductColors(request: ServerRequest): Mono<ServerResponse> =
         request.toMono().map {
             colorRepository.findByProduct(it.pathVariable("product_id").toInt())
+        }.flatMap {
+            ok().json().body(it)
+        }
+
+    fun saveProduct(request: ServerRequest): Mono<ServerResponse> =
+        request.bodyToMono<Product>().map {
+            productRepository.save(it)
         }.flatMap {
             ok().json().body(it)
         }
