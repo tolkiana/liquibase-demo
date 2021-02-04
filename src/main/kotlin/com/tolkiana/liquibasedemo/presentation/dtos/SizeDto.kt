@@ -9,5 +9,5 @@ data class SizeDto(
     val id: Number,
     val code: String? = null,
     @JsonProperty("sort_order")
-    val sortOrder: SortOrder? = null
+    val sortOrder: Number? = null
 )
