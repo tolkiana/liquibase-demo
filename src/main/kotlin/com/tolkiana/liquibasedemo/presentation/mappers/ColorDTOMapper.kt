@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Component
-class ColorMapper: DTOMapper<ColorDto, Color> {
+class ColorDTOMapper: DTOMapper<ColorDto, Color> {
     override fun toDTOs(models: Flux<Color>): Flux<ColorDto> {
         return models.map { toDTO(it) }
     }

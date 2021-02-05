@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Component
-class SizeMapper: DTOMapper<SizeDto, Size> {
+class SizeDTOMapper: DTOMapper<SizeDto, Size> {
     override fun toDTOs(models: Flux<Size>): Flux<SizeDto> {
         return models.map { toDTO(it) }
     }

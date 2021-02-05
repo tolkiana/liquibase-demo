@@ -8,9 +8,9 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Component
-class ProductMapper(
-    private val colorMapper: ColorMapper,
-    private val sizeMapper: SizeMapper
+class ProductDTOMapper(
+    private val colorMapper: ColorDTOMapper,
+    private val sizeMapper: SizeDTOMapper
 ): DTOMapper<ProductDto, Product> {
     override fun toDTOs(models: Flux<Product>): Flux<ProductDto> {
         return models.map { toDTO(it) }
