@@ -21,6 +21,7 @@ interface CustomSizeRepository {
     fun findByProduct(productId: Number): Flux<Size>
 }
 
+// Custom Repositories need to en with "Impl" or everything explodes!
 class CustomSizeRepositoryImpl(
     private val databaseClient: DatabaseClient,
     private val mapper: SizeMapper
