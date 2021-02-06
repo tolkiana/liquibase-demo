@@ -2,9 +2,11 @@ package com.tolkiana.liquibasedemo.data
 
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Flux
+
 
 const val insertProductColor = """
-    INSERT INTO product_colors (product_id, color_id) VALUES (:productId, colorId)
+    INSERT INTO product_colors (product_id, color_id) VALUES ($1, $2)
 """
 
 const val deleteProductColor = """
@@ -13,23 +15,25 @@ const val deleteProductColor = """
 
 @Repository
 interface ProductColorRepository {
-    fun insertProductColor(productId: Number, colorId: Number)
-    fun deleteProductColor(productId: Number, colorId: Number)
+    fun insertProductColors(productId: Number, colorIds: List<Number>): Flux<Number>
+    fun deleteProductColors(productId: Number, colorIds: List<Number>)
 }
 
 class DefaultProductColorRepository(private val databaseClient: DatabaseClient): ProductColorRepository {
-    override fun insertProductColor(productId: Number, colorId: Number) {
-        databaseClient.sql(insertProductColor)
-            .bind("productId", productId)
-            .bind("colorId", colorId)
-            .fetch()
-            .first()
+    override fun insertProductColors(productId: Number, colorIds: List<Number>): Flux<Number> {
+        return databaseClient.inConnectionMany { connection ->
+            val statement = connection.createStatement(insertProductColor)
+            colorIds.forEach {
+                statement.bind(0, productId).bind(1, it).add()
+            }
+            Flux.from(statement.execute()).flatMap { result ->
+                result.map { row, _ -> row.get("color_id", Number::class.java)!! }
+            }
+        }
     }
 
-    override fun deleteProductColor(productId: Number, colorId: Number) {
-        databaseClient.sql(deleteProductColor)
-            .bind("productId", productId)
-            .bind("colorId", colorId).fetch()
-            .rowsUpdated()
+    override fun deleteProductColors(productId: Number, colorIds: List<Number>) {
+        TODO("Not yet implemented")
     }
+
 }
