@@ -2,8 +2,8 @@ package com.tolkiana.liquibasedemo.data
 
 import com.tolkiana.liquibasedemo.data.mappers.ProductMapper
 import com.tolkiana.liquibasedemo.data.models.Product
-import org.springframework.data.r2dbc.core.DatabaseClient
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import org.springframework.r2dbc.core.DatabaseClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -29,15 +29,13 @@ class CustomProductRepositoryImpl(
     private val mapper: ProductMapper
 ): CustomProductRepository {
     override fun findAll(): Flux<Product> {
-        return databaseClient
-            .execute(selectAllProducts)
+        return databaseClient.sql(selectAllProducts)
             .map(mapper::apply)
             .all()
     }
 
     override fun save(product: Product): Mono<Product> {
-        return databaseClient
-            .execute(insertProduct)
+        return databaseClient.sql(insertProduct)
             .filter { statement, _ -> statement.returnGeneratedValues("id").execute() }
             .bind("code", product.code)
             .bind("description", product.description)

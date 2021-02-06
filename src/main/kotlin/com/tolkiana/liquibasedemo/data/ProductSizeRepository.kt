@@ -1,6 +1,6 @@
 package com.tolkiana.liquibasedemo.data
 
-import org.springframework.data.r2dbc.core.DatabaseClient
+import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
 
 @Repository

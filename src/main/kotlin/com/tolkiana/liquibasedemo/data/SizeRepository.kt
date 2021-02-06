@@ -2,8 +2,8 @@ package com.tolkiana.liquibasedemo.data
 
 import com.tolkiana.liquibasedemo.data.mappers.SizeMapper
 import com.tolkiana.liquibasedemo.data.models.Size
-import org.springframework.data.r2dbc.core.DatabaseClient
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 
@@ -27,8 +27,7 @@ class CustomSizeRepositoryImpl(
     private val mapper: SizeMapper
 ): CustomSizeRepository {
     override fun findByProduct(productId: Number): Flux<Size> {
-        return databaseClient
-            .execute(selectSizesByProduct)
+        return databaseClient.sql(selectSizesByProduct)
             .bind("productId", productId)
             .map(mapper::apply)
             .all()

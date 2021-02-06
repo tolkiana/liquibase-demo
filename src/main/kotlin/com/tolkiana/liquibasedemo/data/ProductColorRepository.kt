@@ -1,6 +1,6 @@
 package com.tolkiana.liquibasedemo.data
 
-import org.springframework.data.r2dbc.core.DatabaseClient
+import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
 
 const val insertProductColor = """
@@ -19,7 +19,7 @@ interface ProductColorRepository {
 
 class DefaultProductColorRepository(private val databaseClient: DatabaseClient): ProductColorRepository {
     override fun insertProductColor(productId: Number, colorId: Number) {
-        databaseClient.execute(insertProductColor)
+        databaseClient.sql(insertProductColor)
             .bind("productId", productId)
             .bind("colorId", colorId)
             .fetch()
@@ -27,7 +27,7 @@ class DefaultProductColorRepository(private val databaseClient: DatabaseClient):
     }
 
     override fun deleteProductColor(productId: Number, colorId: Number) {
-        databaseClient.execute(deleteProductColor)
+        databaseClient.sql(deleteProductColor)
             .bind("productId", productId)
             .bind("colorId", colorId).fetch()
             .rowsUpdated()
