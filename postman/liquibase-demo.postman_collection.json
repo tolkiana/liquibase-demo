@@ -6,44 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "/products/{product_id}/sizes",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/products/{{product_id}}/sizes",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"products",
-						"{{product_id}}",
-						"sizes"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/products/{product_id}/colors",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/products/{{product_id}}/colors",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"products",
-						"{{product_id}}",
-						"colors"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "/sizes",
 			"request": {
 				"method": "GET",
@@ -89,6 +51,133 @@
 					],
 					"path": [
 						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{{product_id}}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/products/{{product_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{product_id}/sizes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/products/{{product_id}}/sizes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}",
+						"sizes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{product_id}/colors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/products/{{product_id}}/colors",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}",
+						"colors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n        \"code\": \"COLLAR\",\n        \"description\": \"Ella Collar\",\n        \"colors\": [\n            {\"id\": 1}, {\"id\": 2} \n        ],\n        \"sizes\": [\n            {\"id\": 1}, {\"id\": 2} \n        ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/products",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{{product_id}}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/products/{{product_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{{product_id}}",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n    \"code\": \"COLLAR\",\n    \"description\": \"Canuta Collar\",\n    \"colors\": [\n        {\"id\": 3}, {\"id\": 4} \n    ],\n    \"sizes\": [\n        {\"id\": 1}, {\"id\": 2} \n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/products/{{product_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
 					]
 				}
 			},
