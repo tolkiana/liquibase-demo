@@ -1,5 +1,6 @@
 package com.tolkiana.liquibasedemo.application
 
+import com.pacoworks.komprehensions.reactor.doFlatMapMono
 import com.tolkiana.liquibasedemo.data.ColorRepository
 import com.tolkiana.liquibasedemo.data.ProductRepository
 import com.tolkiana.liquibasedemo.data.SizeRepository
@@ -47,5 +48,14 @@ class ProductService(
             .deleteProductColors(productId)
             .then(productRepository.deleteProductSizes(productId))
             .then(productRepository.deleteById(productId))
+    }
+
+    fun getProductById(productId: Int): Mono<Product> {
+        return doFlatMapMono(
+            { productRepository.findById(productId) },
+            { product -> colorRepository.findByProduct(product.id!!).collectList() },
+            { product, _ -> sizeRepository.findByProduct(product.id!!).collectList() },
+            { product, colors, sizes -> product.copy(colors = colors, sizes = sizes).toMono() }
+        )
     }
 }

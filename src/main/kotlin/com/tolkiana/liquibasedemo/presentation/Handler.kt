@@ -72,11 +72,20 @@ class Handler(
             ok().json().body(it)
         }
 
-    fun saveProduct(request: ServerRequest): Mono<ServerResponse> =
+    fun createProduct(request: ServerRequest): Mono<ServerResponse> =
         request.bodyToMono<ProductDto>().map {
             productMapper.toModel(it)
         }.map {
             productService.createProduct(it)
+        }.map {
+            productMapper.toDTO(it)
+        }.flatMap {
+            ok().json().body(it)
+        }
+
+    fun getProduct(request: ServerRequest): Mono<ServerResponse> =
+        request.toMono().map {
+            productService.getProductById(it.pathVariable("product_id").toInt())
         }.map {
             productMapper.toDTO(it)
         }.flatMap {
