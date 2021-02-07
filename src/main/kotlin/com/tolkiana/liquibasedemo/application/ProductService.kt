@@ -1,15 +1,11 @@
 package com.tolkiana.liquibasedemo.application
 
-import com.pacoworks.komprehensions.reactor.doFlatMap
-import com.pacoworks.komprehensions.reactor.doFlatMapMono
 import com.tolkiana.liquibasedemo.data.ColorRepository
-import com.tolkiana.liquibasedemo.data.ProductColorRepository
 import com.tolkiana.liquibasedemo.data.ProductRepository
 import com.tolkiana.liquibasedemo.data.SizeRepository
 import com.tolkiana.liquibasedemo.data.models.Color
 import com.tolkiana.liquibasedemo.data.models.Product
 import com.tolkiana.liquibasedemo.data.models.Size
-import com.tolkiana.liquibasedemo.errorHandling.UnexpectedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
@@ -20,8 +16,7 @@ import reactor.kotlin.core.publisher.toMono
 class ProductService(
     private val productRepository: ProductRepository,
     private val colorRepository: ColorRepository,
-    private val sizeRepository: SizeRepository,
-    private val productColorRepository: ProductColorRepository
+    private val sizeRepository: SizeRepository
 ) {
 
     fun getAllProducts(): Flux<Product> {
@@ -38,12 +33,12 @@ class ProductService(
 
     @Transactional
     fun createProduct(product: Product): Mono<Product> {
-        val colors = product.colors.map { it.id }
+        val colorIds = product.colors.map { it.id }
+        val sizeIds = product.sizes.map { it.id }
         return productRepository.save(product).flatMap {
-            val productId = it.id ?: throw UnexpectedException()
-            productColorRepository
-                .insertProductColors(productId, colors)
-                .then(it.toMono())
+            productRepository.insertProductColors(it.id!!, colorIds).then(it.toMono())
+        }.flatMap {
+            productRepository.insertProductSize(it.id!!, sizeIds).then(it.toMono())
         }
     }
 }

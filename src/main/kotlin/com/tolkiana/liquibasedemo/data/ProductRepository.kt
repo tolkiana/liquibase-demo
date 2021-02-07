@@ -6,6 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import org.springframework.r2dbc.core.DatabaseClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toFlux
 
 const val selectAllProducts = """
     SELECT p.id as product_id, p.code as product_code, description as product_description
@@ -16,11 +17,21 @@ const val insertProduct = """
     INSERT INTO products (code, description) VALUES (:code, :description)
 """
 
+const val insertProductColor = """
+    INSERT INTO product_colors (product_id, color_id) VALUES ($1, $2)
+"""
+
+const val insertProductSize = """
+    INSERT INTO product_sizes (product_id, size_id) VALUES ($1, $2)
+"""
+
 interface ProductRepository: ReactiveCrudRepository<Product, Int>, CustomProductRepository {}
 
 interface CustomProductRepository {
     fun findAll(): Flux<Product>
     fun save(product: Product): Mono<Product>
+    fun insertProductColors(productId: Number, colorIds: List<Number>): Flux<Number>
+    fun insertProductSize(productId: Number, sizeIds: List<Number>): Flux<Number>
 }
 
 // Custom Repositories need to en with "Impl" or everything explodes!
@@ -42,5 +53,29 @@ class CustomProductRepositoryImpl(
             .fetch()
             .first()
             .map { product.copy(id = it["id"] as Number?) }
+    }
+
+    override fun insertProductColors(productId: Number, colorIds: List<Number>): Flux<Number> {
+        return databaseClient.inConnectionMany { connection ->
+            val statement = connection.createStatement(insertProductColor)
+            colorIds.forEach {
+                statement.bind(0, productId).bind(1, it).add()
+            }
+            statement.execute().toFlux().flatMap { result ->
+                result.map { row, _ -> row.get("color_id", Number::class.java)!! }
+            }
+        }
+    }
+
+    override fun insertProductSize(productId: Number, sizeIds: List<Number>): Flux<Number> {
+        return databaseClient.inConnectionMany { connection ->
+            val statement = connection.createStatement(insertProductSize)
+            sizeIds.forEach {
+                statement.bind(0, productId).bind(1, it).add()
+            }
+            statement.execute().toFlux().flatMap { result ->
+                result.map { row, _ -> row.get("size_id", Number::class.java)!! }
+            }
+        }
     }
 }
