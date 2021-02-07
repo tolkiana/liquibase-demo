@@ -3,6 +3,7 @@ package com.tolkiana.liquibasedemo.data
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
+import reactor.kotlin.core.publisher.toFlux
 
 
 const val insertProductColor = """
@@ -19,14 +20,14 @@ interface ProductColorRepository {
     fun deleteProductColors(productId: Number, colorIds: List<Number>)
 }
 
-class DefaultProductColorRepository(private val databaseClient: DatabaseClient): ProductColorRepository {
+class DefaultProductColorRepository(private val databaseClient: DatabaseClient) : ProductColorRepository {
     override fun insertProductColors(productId: Number, colorIds: List<Number>): Flux<Number> {
         return databaseClient.inConnectionMany { connection ->
             val statement = connection.createStatement(insertProductColor)
             colorIds.forEach {
                 statement.bind(0, productId).bind(1, it).add()
             }
-            Flux.from(statement.execute()).flatMap { result ->
+            statement.execute().toFlux().flatMap { result ->
                 result.map { row, _ -> row.get("color_id", Number::class.java)!! }
             }
         }

@@ -3,7 +3,6 @@ package com.tolkiana.liquibasedemo.presentation
 import com.tolkiana.liquibasedemo.application.ColorService
 import com.tolkiana.liquibasedemo.application.ProductService
 import com.tolkiana.liquibasedemo.application.SizeService
-import com.tolkiana.liquibasedemo.data.models.Product
 import com.tolkiana.liquibasedemo.presentation.dtos.ProductDto
 import com.tolkiana.liquibasedemo.presentation.mappers.ColorDTOMapper
 import com.tolkiana.liquibasedemo.presentation.mappers.ProductDTOMapper
@@ -11,7 +10,7 @@ import com.tolkiana.liquibasedemo.presentation.mappers.SizeDTOMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.ServerResponse.*
+import org.springframework.web.reactive.function.server.ServerResponse.ok
 import org.springframework.web.reactive.function.server.body
 import org.springframework.web.reactive.function.server.bodyToMono
 import org.springframework.web.reactive.function.server.json
