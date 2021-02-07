@@ -5,7 +5,7 @@ package com.tolkiana.liquibasedemo.extensions
  * @param b collection to compare
  * @return only the items that are in this collection but not in `b`
  */
-fun <T> Iterable<T>.findDiff(b: Iterable<T>): Set<T> {
+fun <T> Iterable<T>.findDiff(b: Iterable<T>): List<T> {
     val itemsInBoth = this.intersect(b)
-    return this.subtract(itemsInBoth).toSet()
+    return this.subtract(itemsInBoth).toList()
 }
