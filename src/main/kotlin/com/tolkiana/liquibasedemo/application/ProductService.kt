@@ -7,6 +7,8 @@ import com.tolkiana.liquibasedemo.data.SizeRepository
 import com.tolkiana.liquibasedemo.data.models.Color
 import com.tolkiana.liquibasedemo.data.models.Product
 import com.tolkiana.liquibasedemo.data.models.Size
+import com.tolkiana.liquibasedemo.errorHandling.UnexpectedException
+import com.tolkiana.liquibasedemo.extensions.findDiff
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
@@ -39,15 +41,27 @@ class ProductService(
         return productRepository
             .save(product)
             .flatMap { productRepository.insertProductColors(it.id!!, colorIds).then(it.toMono()) }
-            .flatMap { productRepository.insertProductSize(it.id!!, sizeIds).then(it.toMono()) }
+            .flatMap { productRepository.insertProductSizes(it.id!!, sizeIds).then(it.toMono()) }
     }
 
     @Transactional
     fun deleteProduct(productId: Int): Mono<Void> {
         return productRepository
-            .deleteProductColors(productId)
-            .then(productRepository.deleteProductSizes(productId))
+            .deleteAllProductColors(productId)
+            .then(productRepository.deleteAllProductSizes(productId))
             .then(productRepository.deleteById(productId))
+    }
+
+    @Transactional
+    fun updateProduct(updatedProduct: Product): Mono<Product> {
+        val productId = updatedProduct.id?.toInt() ?: throw UnexpectedException()
+        return doFlatMapMono(
+            { getProductById(productId) },
+            { currentProduct -> updateColors(currentProduct.colors, updatedProduct.colors, productId).collectList() },
+            { currentProduct, _ -> updateSizes(currentProduct.sizes, updatedProduct.sizes, productId).collectList() },
+            { _, _, _ -> productRepository.update(updatedProduct) },
+            { _, newColors, newSizes, _ -> updatedProduct.copy(colors = newColors, sizes = newSizes).toMono() }
+        )
     }
 
     fun getProductById(productId: Int): Mono<Product> {
@@ -57,5 +71,23 @@ class ProductService(
             { product, _ -> sizeRepository.findByProduct(product.id!!).collectList() },
             { product, colors, sizes -> product.copy(colors = colors, sizes = sizes).toMono() }
         )
+    }
+
+    private fun updateColors(current: List<Color>, updated: List<Color>, productId: Number): Flux<Color> {
+        val toDelete = current.map { it.id }.findDiff(updated.map { it.id })
+        val toInsert = updated.map { it.id }.findDiff(current.map { it.id })
+        return productRepository
+            .deleteProductColors(productId, toDelete)
+            .thenMany(productRepository.insertProductColors(productId, toInsert))
+            .thenMany(colorRepository.findByProduct(productId))
+    }
+
+    private fun updateSizes(current: List<Size>, updated: List<Size>, productId: Number): Flux<Size> {
+        val toDelete = current.map { it.id }.findDiff(updated.map { it.id })
+        val toInsert = updated.map { it.id }.findDiff(current.map { it.id })
+        return productRepository
+            .deleteProductSizes(productId, toDelete)
+            .thenMany(productRepository.insertProductSizes(productId, toInsert))
+            .thenMany(sizeRepository.findByProduct(productId))
     }
 }

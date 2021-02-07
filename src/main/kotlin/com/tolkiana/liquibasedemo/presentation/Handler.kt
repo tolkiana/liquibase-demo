@@ -92,6 +92,17 @@ class Handler(
             ok().json().body(it)
         }
 
+    fun updateProduct(request: ServerRequest): Mono<ServerResponse> =
+        request.bodyToMono<ProductDto>().map {
+            productMapper.toModel(it.copy(id = request.pathVariable("product_id").toInt()))
+        }.map {
+            productService.updateProduct(it)
+        }.map {
+            productMapper.toDTO(it)
+        }.flatMap {
+            ok().json().body(it)
+        }
+
     fun deleteProduct(request: ServerRequest): Mono<ServerResponse> =
         request.toMono().flatMap {
             productService.deleteProduct(it.pathVariable("product_id").toInt())

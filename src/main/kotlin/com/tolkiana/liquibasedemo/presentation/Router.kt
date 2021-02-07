@@ -11,9 +11,10 @@ class Router(private val handler: Handler) {
     @Bean("routes")
     fun routes(): RouterFunction<ServerResponse> {
         return router {
+            POST("/products", handler::createProduct)
             GET("/products", handler::getAllProducts)
             GET("/products/{product_id}", handler::getProduct)
-            POST("/products", handler::createProduct)
+            PUT("/products/{product_id}", handler::updateProduct)
             DELETE("/products/{product_id}", handler::deleteProduct)
             GET("/products/{product_id}/sizes", handler::getProductSizes)
             GET("/products/{product_id}/colors", handler::getProductColors)
