@@ -34,7 +34,7 @@ class ProductDTOMapper(
             code = model.code,
             description = model.description,
             colors = model.colors.map { colorMapper.toDTO(it) }.toSet(),
-            size = model.sizes.map { sizeMapper.toDTO(it) }.toSet()
+            sizes = model.sizes.map { sizeMapper.toDTO(it) }.toSet()
         )
     }
 
@@ -44,7 +44,7 @@ class ProductDTOMapper(
             code = dto.code ?: "",
             description = dto.description ?: "",
             colors = dto.colors?.map { colorMapper.toModel(it) } ?: emptyList(),
-            sizes = dto.size?.map { sizeMapper.toModel(it) } ?: emptyList()
+            sizes = dto.sizes?.map { sizeMapper.toModel(it) } ?: emptyList()
         )
     }
 }

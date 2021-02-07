@@ -8,5 +8,5 @@ data class ProductDto(
     val code: String? = null,
     val description: String? = null,
     val colors: Set<ColorDto>? = null,
-    val size: Set<SizeDto>? = null
+    val sizes: Set<SizeDto>? = null
 )
