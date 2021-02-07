@@ -12,11 +12,12 @@ class Router(private val handler: Handler) {
     fun routes(): RouterFunction<ServerResponse> {
         return router {
             GET("/products", handler::getAllProducts)
+            POST("/products", handler::saveProduct)
+            DELETE("/products/{product_id}", handler::deleteProduct)
             GET("/products/{product_id}/sizes", handler::getProductSizes)
             GET("/products/{product_id}/colors", handler::getProductColors)
             GET("/sizes", handler::getAllSizes)
             GET("/colors", handler::getAllColors)
-            POST("/products", handler::saveProduct)
         }
     }
 }

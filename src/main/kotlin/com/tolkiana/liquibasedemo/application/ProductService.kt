@@ -35,10 +35,17 @@ class ProductService(
     fun createProduct(product: Product): Mono<Product> {
         val colorIds = product.colors.map { it.id }
         val sizeIds = product.sizes.map { it.id }
-        return productRepository.save(product).flatMap {
-            productRepository.insertProductColors(it.id!!, colorIds).then(it.toMono())
-        }.flatMap {
-            productRepository.insertProductSize(it.id!!, sizeIds).then(it.toMono())
-        }
+        return productRepository
+            .save(product)
+            .flatMap { productRepository.insertProductColors(it.id!!, colorIds).then(it.toMono()) }
+            .flatMap { productRepository.insertProductSize(it.id!!, sizeIds).then(it.toMono()) }
+    }
+
+    @Transactional
+    fun deleteProduct(productId: Int): Mono<Void> {
+        return productRepository
+            .deleteProductColors(productId)
+            .then(productRepository.deleteProductSizes(productId))
+            .then(productRepository.deleteById(productId))
     }
 }

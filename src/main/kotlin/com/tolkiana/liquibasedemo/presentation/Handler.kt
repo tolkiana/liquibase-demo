@@ -10,6 +10,7 @@ import com.tolkiana.liquibasedemo.presentation.mappers.SizeDTOMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import org.springframework.web.reactive.function.server.ServerResponse.ok
 import org.springframework.web.reactive.function.server.body
 import org.springframework.web.reactive.function.server.bodyToMono
@@ -80,5 +81,12 @@ class Handler(
             productMapper.toDTO(it)
         }.flatMap {
             ok().json().body(it)
+        }
+
+    fun deleteProduct(request: ServerRequest): Mono<ServerResponse> =
+        request.toMono().flatMap {
+            productService.deleteProduct(it.pathVariable("product_id").toInt())
+        }.flatMap {
+            noContent().build()
         }
 }
