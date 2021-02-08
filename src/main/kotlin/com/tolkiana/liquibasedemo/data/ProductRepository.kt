@@ -51,7 +51,7 @@ interface CustomProductRepository {
     fun deleteProductSizes(productId: Number, sizesIds: List<Number>): Mono<Void>
 }
 
-// Custom Repositories need to en with "Impl" or everything explodes!
+// Custom Repositories need to end with "Impl" or everything explodes!
 class CustomProductRepositoryImpl(
     private val databaseClient: DatabaseClient,
     private val mapper: ProductMapper

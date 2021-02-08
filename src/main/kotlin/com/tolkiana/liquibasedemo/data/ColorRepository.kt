@@ -21,7 +21,7 @@ interface CustomColorRepository {
     fun findByProduct(productId: Number): Flux<Color>
 }
 
-// Custom Repositories need to en with "Impl" or everything explodes!
+// Custom Repositories need to end with "Impl" or everything explodes!
 class CustomColorRepositoryImpl(
         private val databaseClient: DatabaseClient,
         private val mapper: ColorMapper
