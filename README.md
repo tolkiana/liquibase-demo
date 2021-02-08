@@ -1,6 +1,6 @@
 # Spring Boot with Liquibase and R2DBC
 
-This is a Demo project which purpose is to showcase a small service that uses Liquibase for a tutorial I'm writting. During the making of this project I wanted to also try a Reactive approach to connect with the Database by using R2DBC. 
+This is a Demo project which purpose is to showcase a small service that uses [Liquibase](https://www.liquibase.org/) for a tutorial I'm writing. During the making of this project I wanted to also try a Reactive approach to connect with the Database by using [R2DBC](https://spring.io/projects/spring-data-r2dbc). 
 
 The API reads from a database with the following tables and relations.
 
