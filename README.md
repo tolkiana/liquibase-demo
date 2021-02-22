@@ -4,7 +4,7 @@ This is a Demo project which purpose is to showcase a small service which uses [
 
 The API reads from a database with the following tables and relations.
 
-![](documentation/images/liquibase-demo-db.jpeg)
+![](documentation/images/liquibase-demo-db.png)
 
 ## Requirements 
 
