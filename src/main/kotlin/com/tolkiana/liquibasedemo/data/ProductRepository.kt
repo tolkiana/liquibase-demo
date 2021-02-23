@@ -37,6 +37,14 @@ const val updateProduct = """
     UPDATE products SET code = :code, description = :description WHERE id = :productId
 """
 
+const val deleteProductColor = """
+    DELETE FROM product_colors WHERE product_id = $1 AND color_id = $2
+"""
+
+const val deleteProductSize = """
+    DELETE FROM product_sizes WHERE product_id = $1 AND size_id = $2
+"""
+
 interface ProductRepository: ReactiveCrudRepository<Product, Int>, CustomProductRepository {}
 
 interface CustomProductRepository {
@@ -81,6 +89,7 @@ class CustomProductRepositoryImpl(
     }
 
     override fun insertProductColors(productId: Int, colorIds: List<Int>): Flux<Number> {
+        if (colorIds.isEmpty()) return Flux.empty()
         return databaseClient.inConnectionMany { connection ->
             val statement = connection.createStatement(insertProductColor)
             colorIds.forEach {
@@ -93,6 +102,7 @@ class CustomProductRepositoryImpl(
     }
 
     override fun insertProductSizes(productId: Int, sizeIds: List<Int>): Flux<Number> {
+        if (sizeIds.isEmpty()) return Flux.empty()
         return databaseClient.inConnectionMany { connection ->
             val statement = connection.createStatement(insertProductSize)
             sizeIds.forEach {
@@ -119,22 +129,24 @@ class CustomProductRepositoryImpl(
     }
 
     override fun deleteProductColors(productId: Int, colorIds: List<Int>): Mono<Void> {
+        if (colorIds.isEmpty()) return  Mono.empty()
         return databaseClient.inConnection { connection ->
-            val batch = connection.createBatch()
+            val statement = connection.createStatement(deleteProductColor)
             colorIds.forEach {
-                batch.add("DELETE FROM product_colors WHERE product_id = $productId AND color_id = $it")
+                statement.bind(0, productId).bind(1, it).add()
             }
-            batch.execute().toFlux().then()
+            statement.execute().toFlux().then()
         }
     }
 
     override fun deleteProductSizes(productId: Int, sizesIds: List<Int>): Mono<Void> {
+        if (sizesIds.isEmpty()) return  Mono.empty()
         return databaseClient.inConnection { connection ->
-            val batch = connection.createBatch()
+            val statement = connection.createStatement(deleteProductSize)
             sizesIds.forEach {
-                batch.add("DELETE FROM product_sizes WHERE product_id = $productId AND size_id = $it")
+                statement.bind(0, productId).bind(1, it).add()
             }
-            batch.execute().toFlux().then()
+            statement.execute().toFlux().then()
         }
     }
 }
