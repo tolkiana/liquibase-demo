@@ -6,7 +6,7 @@ import javax.swing.SortOrder
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class SizeDto(
-    val id: Number,
+    val id: Int,
     val code: String? = null,
     @JsonProperty("sort_order")
     val sortOrder: Number? = null

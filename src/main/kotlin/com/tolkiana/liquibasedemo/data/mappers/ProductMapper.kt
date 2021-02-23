@@ -10,7 +10,7 @@ import java.util.function.BiFunction
 class ProductMapper: BiFunction<Row, Any, Product> {
     override fun apply(row: Row, o: Any): Product {
         return Product(
-            row.get("product_id", Number::class.java) ?: throw UnexpectedException(),
+            row.get("product_id", Int::class.java) ?: throw UnexpectedException(),
             row.get("product_code", String::class.java) ?: throw UnexpectedException(),
             row.get("product_description", String::class.java) ?: throw UnexpectedException()
         )

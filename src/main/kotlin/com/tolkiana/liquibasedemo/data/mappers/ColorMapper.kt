@@ -10,7 +10,7 @@ import java.util.function.BiFunction
 class ColorMapper: BiFunction<Row, Any, Color> {
     override fun apply(row: Row, o: Any): Color {
         return Color(
-            row.get("color_id", Number::class.java) ?: throw UnexpectedException(),
+            row.get("color_id", Int::class.java) ?: throw UnexpectedException(),
             row.get("color_code", String::class.java) ?: throw UnexpectedException(),
             row.get("color_name", String::class.java) ?: throw UnexpectedException()
         )

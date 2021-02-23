@@ -26,11 +26,11 @@ class ProductService(
         return productRepository.findAll()
     }
 
-    fun getProductColors(productId: Number): Flux<Color> {
+    fun getProductColors(productId: Int): Flux<Color> {
         return colorRepository.findByProduct(productId)
     }
 
-    fun getProductSizes(productId: Number): Flux<Size> {
+    fun getProductSizes(productId: Int): Flux<Size> {
         return sizeRepository.findByProduct(productId)
     }
 
@@ -73,7 +73,7 @@ class ProductService(
         )
     }
 
-    private fun updateColors(current: List<Color>, updated: List<Color>, productId: Number): Flux<Color> {
+    private fun updateColors(current: List<Color>, updated: List<Color>, productId: Int): Flux<Color> {
         val toDelete = current.map { it.id }.findDiff(updated.map { it.id })
         val toInsert = updated.map { it.id }.findDiff(current.map { it.id })
         return productRepository
@@ -82,7 +82,7 @@ class ProductService(
             .thenMany(colorRepository.findByProduct(productId))
     }
 
-    private fun updateSizes(current: List<Size>, updated: List<Size>, productId: Number): Flux<Size> {
+    private fun updateSizes(current: List<Size>, updated: List<Size>, productId: Int): Flux<Size> {
         val toDelete = current.map { it.id }.findDiff(updated.map { it.id })
         val toInsert = updated.map { it.id }.findDiff(current.map { it.id })
         return productRepository

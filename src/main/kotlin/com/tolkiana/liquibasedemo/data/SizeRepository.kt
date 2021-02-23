@@ -18,7 +18,7 @@ const val selectSizesByProduct = """
 interface SizeRepository: ReactiveCrudRepository<Size, Int>, CustomSizeRepository {}
 
 interface CustomSizeRepository {
-    fun findByProduct(productId: Number): Flux<Size>
+    fun findByProduct(productId: Int): Flux<Size>
 }
 
 // Custom Repositories need to end with "Impl" or everything explodes!
@@ -26,7 +26,7 @@ class CustomSizeRepositoryImpl(
     private val databaseClient: DatabaseClient,
     private val mapper: SizeMapper
 ): CustomSizeRepository {
-    override fun findByProduct(productId: Number): Flux<Size> {
+    override fun findByProduct(productId: Int): Flux<Size> {
         return databaseClient.sql(selectSizesByProduct)
             .bind("productId", productId)
             .map(mapper::apply)

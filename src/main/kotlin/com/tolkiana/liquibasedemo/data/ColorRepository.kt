@@ -18,7 +18,7 @@ const val selectColorsByProduct = """
 interface ColorRepository: ReactiveCrudRepository<Color, Int>, CustomColorRepository {}
 
 interface CustomColorRepository {
-    fun findByProduct(productId: Number): Flux<Color>
+    fun findByProduct(productId: Int): Flux<Color>
 }
 
 // Custom Repositories need to end with "Impl" or everything explodes!
@@ -26,7 +26,7 @@ class CustomColorRepositoryImpl(
         private val databaseClient: DatabaseClient,
         private val mapper: ColorMapper
 ): CustomColorRepository {
-    override fun findByProduct(productId: Number): Flux<Color> {
+    override fun findByProduct(productId: Int): Flux<Color> {
         return databaseClient.sql(selectColorsByProduct)
             .bind("productId", productId)
             .map(mapper::apply)

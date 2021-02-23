@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ProductDto(
-    val id: Number? = null,
+    val id: Int? = null,
     val code: String? = null,
     val description: String? = null,
     val colors: Set<ColorDto>? = null,

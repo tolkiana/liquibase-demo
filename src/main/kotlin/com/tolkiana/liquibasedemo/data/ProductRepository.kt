@@ -43,12 +43,12 @@ interface CustomProductRepository {
     fun findAll(): Flux<Product>
     fun save(product: Product): Mono<Product>
     fun update(product: Product): Mono<Int>
-    fun insertProductColors(productId: Number, colorIds: List<Number>): Flux<Number>
-    fun insertProductSizes(productId: Number, sizeIds: List<Number>): Flux<Number>
-    fun deleteAllProductColors(productId: Number): Mono<Int>
-    fun deleteAllProductSizes(productId: Number): Mono<Int>
-    fun deleteProductColors(productId: Number, colorIds: List<Number>): Mono<Void>
-    fun deleteProductSizes(productId: Number, sizesIds: List<Number>): Mono<Void>
+    fun insertProductColors(productId: Int, colorIds: List<Int>): Flux<Number>
+    fun insertProductSizes(productId: Int, sizeIds: List<Int>): Flux<Number>
+    fun deleteAllProductColors(productId: Int): Mono<Int>
+    fun deleteAllProductSizes(productId: Int): Mono<Int>
+    fun deleteProductColors(productId: Int, colorIds: List<Int>): Mono<Void>
+    fun deleteProductSizes(productId: Int, sizesIds: List<Int>): Mono<Void>
 }
 
 // Custom Repositories need to end with "Impl" or everything explodes!
@@ -69,7 +69,7 @@ class CustomProductRepositoryImpl(
             .bind("description", product.description)
             .fetch()
             .first()
-            .map { product.copy(id = it["id"] as Number?) }
+            .map { product.copy(id = it["id"] as Int?) }
     }
 
     override fun update(product: Product): Mono<Int> {
@@ -80,45 +80,45 @@ class CustomProductRepositoryImpl(
             .fetch().rowsUpdated()
     }
 
-    override fun insertProductColors(productId: Number, colorIds: List<Number>): Flux<Number> {
+    override fun insertProductColors(productId: Int, colorIds: List<Int>): Flux<Number> {
         return databaseClient.inConnectionMany { connection ->
             val statement = connection.createStatement(insertProductColor)
             colorIds.forEach {
                 statement.bind(0, productId).bind(1, it).add()
             }
             statement.execute().toFlux().flatMap { result ->
-                result.map { row, _ -> row.get("color_id", Number::class.java)!! }
+                result.map { row, _ -> row.get("color_id", Int::class.java)!! }
             }
         }
     }
 
-    override fun insertProductSizes(productId: Number, sizeIds: List<Number>): Flux<Number> {
+    override fun insertProductSizes(productId: Int, sizeIds: List<Int>): Flux<Number> {
         return databaseClient.inConnectionMany { connection ->
             val statement = connection.createStatement(insertProductSize)
             sizeIds.forEach {
                 statement.bind(0, productId).bind(1, it).add()
             }
             statement.execute().toFlux().flatMap { result ->
-                result.map { row, _ -> row.get("size_id", Number::class.java)!! }
+                result.map { row, _ -> row.get("size_id", Int::class.java)!! }
             }
         }
     }
 
-    override fun deleteAllProductColors(productId: Number): Mono<Int> {
+    override fun deleteAllProductColors(productId: Int): Mono<Int> {
         return databaseClient
             .sql(deleteAllProductColors)
             .bind("productId", productId)
             .fetch().rowsUpdated()
     }
 
-    override fun deleteAllProductSizes(productId: Number): Mono<Int> {
+    override fun deleteAllProductSizes(productId: Int): Mono<Int> {
         return databaseClient
                 .sql(deleteAllProductSizes)
                 .bind("productId", productId)
                 .fetch().rowsUpdated()
     }
 
-    override fun deleteProductColors(productId: Number, colorIds: List<Number>): Mono<Void> {
+    override fun deleteProductColors(productId: Int, colorIds: List<Int>): Mono<Void> {
         return databaseClient.inConnection { connection ->
             val batch = connection.createBatch()
             colorIds.forEach {
@@ -128,7 +128,7 @@ class CustomProductRepositoryImpl(
         }
     }
 
-    override fun deleteProductSizes(productId: Number, sizesIds: List<Number>): Mono<Void> {
+    override fun deleteProductSizes(productId: Int, sizesIds: List<Int>): Mono<Void> {
         return databaseClient.inConnection { connection ->
             val batch = connection.createBatch()
             sizesIds.forEach {
