@@ -69,14 +69,14 @@ class CustomProductRepositoryImpl(
             .bind("description", product.description)
             .fetch()
             .first()
-            .map { product.copy(id = it["id"] as Int?) }
+            .map { product.copy(id = it["id"] as Int) }
     }
 
     override fun update(product: Product): Mono<Int> {
         return databaseClient.sql(updateProduct)
             .bind("code", product.code)
             .bind("description", product.description)
-            .bind("productId", product.id!!)
+            .bind("productId", product.id)
             .fetch().rowsUpdated()
     }
 
@@ -87,7 +87,7 @@ class CustomProductRepositoryImpl(
                 statement.bind(0, productId).bind(1, it).add()
             }
             statement.execute().toFlux().flatMap { result ->
-                result.map { row, _ -> row.get("color_id", Int::class.java)!! }
+                result.map { row, _ -> row.get("color_id", Int::class.java) }
             }
         }
     }
@@ -99,7 +99,7 @@ class CustomProductRepositoryImpl(
                 statement.bind(0, productId).bind(1, it).add()
             }
             statement.execute().toFlux().flatMap { result ->
-                result.map { row, _ -> row.get("size_id", Int::class.java)!! }
+                result.map { row, _ -> row.get("size_id", Int::class.java) }
             }
         }
     }

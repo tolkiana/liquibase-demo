@@ -30,7 +30,7 @@ class ProductDTOMapper(
 
     fun toDTO(model: Product): ProductDto {
         return ProductDto(
-            id = model.id ?: throw UnexpectedException(),
+            id = model.id,
             code = model.code,
             description = model.description,
             colors = model.colors.map { colorMapper.toDTO(it) }.toSet(),
@@ -40,7 +40,7 @@ class ProductDTOMapper(
 
     fun toModel(dto: ProductDto): Product {
         return Product(
-            id = dto.id,
+            id = dto.id ?: 0,
             code = dto.code ?: "",
             description = dto.description ?: "",
             colors = dto.colors?.map { colorMapper.toModel(it) } ?: emptyList(),

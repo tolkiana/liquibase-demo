@@ -40,8 +40,8 @@ class ProductService(
         val sizeIds = product.sizes.map { it.id }
         return productRepository
             .save(product)
-            .flatMap { productRepository.insertProductColors(it.id!!, colorIds).then(it.toMono()) }
-            .flatMap { productRepository.insertProductSizes(it.id!!, sizeIds).then(it.toMono()) }
+            .flatMap { productRepository.insertProductColors(it.id, colorIds).then(it.toMono()) }
+            .flatMap { productRepository.insertProductSizes(it.id, sizeIds).then(it.toMono()) }
     }
 
     @Transactional
@@ -54,11 +54,10 @@ class ProductService(
 
     @Transactional
     fun updateProduct(updatedProduct: Product): Mono<Product> {
-        val productId = updatedProduct.id?.toInt() ?: throw UnexpectedException()
         return doFlatMapMono(
-            { getProductById(productId) },
-            { currentProduct -> updateColors(currentProduct.colors, updatedProduct.colors, productId).collectList() },
-            { currentProduct, _ -> updateSizes(currentProduct.sizes, updatedProduct.sizes, productId).collectList() },
+            { getProductById(updatedProduct.id) },
+            { currentProduct -> updateColors(currentProduct.colors, updatedProduct.colors, currentProduct.id).collectList() },
+            { currentProduct, _ -> updateSizes(currentProduct.sizes, updatedProduct.sizes, currentProduct.id).collectList() },
             { _, _, _ -> productRepository.update(updatedProduct) },
             { _, newColors, newSizes, _ -> updatedProduct.copy(colors = newColors, sizes = newSizes).toMono() }
         )
@@ -67,8 +66,8 @@ class ProductService(
     fun getProductById(productId: Int): Mono<Product> {
         return doFlatMapMono(
             { productRepository.findById(productId) },
-            { product -> colorRepository.findByProduct(product.id!!).collectList() },
-            { product, _ -> sizeRepository.findByProduct(product.id!!).collectList() },
+            { _ -> colorRepository.findByProduct(productId).collectList() },
+            { _, _ -> sizeRepository.findByProduct(productId).collectList() },
             { product, colors, sizes -> product.copy(colors = colors, sizes = sizes).toMono() }
         )
     }
