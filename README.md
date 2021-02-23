@@ -11,17 +11,11 @@ The API reads from a database with the following tables and relations.
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) - To run your containerized PostgreSQL database
 - [Postman](https://www.postman.com/downloads/) - To test the API
 
-Additionally, these are the versions of some of the most important dependencies used in the project
-
-- Java 11
-- Spring Boot 2.4.2
-- Liquibase Plugin 2.0.4
-
 ## Running this project
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop) if you haven't.
 
-2. Run the script [`re-start-local-postgres.sh`](scripts/re-start-local-postgres.sh) located in the `scripts` folder to spin up your Postgres database.
+2. Run the script [`re-start-local-postgres.sh`](scripts/re-start-local-postgres.sh) located in the `scripts` folder to spin up a local version of the Postgres database.
 ```shell script
 scripts/stop-local-postgres.sh    
 ```
@@ -30,7 +24,7 @@ scripts/stop-local-postgres.sh
 ```
  ./gradlew clean bootRun
 ```
-When the app run the Liquibase plugin will run too and the [`main-changelog.yml`](src/main/resources/db/changelog/main-changelog.yml) will execute all the database changes on it. 
+When the app runs, the Liquibase plugin will run too and the [`main-changelog.yml`](src/main/resources/db/changelog/main-changelog.yml) will execute all the database changes on it. 
 
 ## Available endpoints
 
