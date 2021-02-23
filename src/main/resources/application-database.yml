@@ -11,6 +11,7 @@ spring:
     password: liquibase
   liquibase:
     changeLog: "classpath:db/changelog/main-changelog.yml"
+    contexts: prod
     dropFirst: false
 
 logging.level.org.springframework.data.r2dbc: DEBUG
