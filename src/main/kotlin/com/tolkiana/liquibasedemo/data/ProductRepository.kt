@@ -131,22 +131,28 @@ class CustomProductRepositoryImpl(
     override fun deleteProductColors(productId: Int, colorIds: List<Int>): Mono<Void> {
         if (colorIds.isEmpty()) return  Mono.empty()
         return databaseClient.inConnection { connection ->
-            val statement = connection.createStatement(deleteProductColor)
+            val batch = connection.createBatch()
             colorIds.forEach {
-                statement.bind(0, productId).bind(1, it).add()
+                // This is no ideal, but I haven't find a way to bind values
+                // Using inConnectionMany and createStatement like in the insert example,
+                // does not delete the rows
+                batch.add("DELETE FROM product_colors WHERE product_id = $productId AND color_id = $it")
             }
-            statement.execute().toFlux().then()
+            batch.execute().toFlux().then()
         }
     }
 
     override fun deleteProductSizes(productId: Int, sizesIds: List<Int>): Mono<Void> {
         if (sizesIds.isEmpty()) return  Mono.empty()
         return databaseClient.inConnection { connection ->
-            val statement = connection.createStatement(deleteProductSize)
+            val batch = connection.createBatch()
             sizesIds.forEach {
-                statement.bind(0, productId).bind(1, it).add()
+                // This is no ideal, but I haven't find a way to bind values
+                // Using inConnectionMany and createStatement like in the insert example,
+                // does not delete the rows
+                batch.add("DELETE FROM product_sizes WHERE product_id = $productId AND size_id = $it")
             }
-            statement.execute().toFlux().then()
+            batch.execute().toFlux().then()
         }
     }
 }
